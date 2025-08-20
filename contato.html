@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Contato</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --purple-glow: rgba(160,32,240,0.6); }
+        html,body{height:100%;margin:0;}
+        body{
+            overflow:hidden;font-family:Arial, sans-serif;display:flex;flex-direction:column;
+            justify-content:center;align-items:center;position:relative;
+            background: url("{{ url_for('static', filename='killua-program.png') }}") no-repeat center center fixed;
+            background-size: cover;
+        }
+        canvas{position:fixed;top:0;left:0;z-index:0;}
+        h1{margin-bottom:30px;font-size:2rem;color:#a020f0;text-shadow:0 0 10px #a020f0;z-index:2;}
+        .contact-links{display:flex;flex-direction:column;gap:12px;z-index:2;align-items:center;}
+        .btn{padding:12px 25px;border-radius:8px;text-decoration:none;font-weight:bold;text-align:center;
+             transition:transform .2s,opacity .2s;color:#fff;box-shadow:0 0 10px var(--purple-glow);z-index:2;font-family:inherit;}
+        .btn:hover{transform:scale(1.05);opacity:.95;}
+        .btn-whatsapp{background:#7b2cbf;}
+        .btn-instagram{background:linear-gradient(45deg,#fa7e1e,#d62976,#962fbf,#4f5bd5);}
+        .btn-email{background:#7b2cbf;}
+        .btn-phone{background:#9c27b0;}
+        .btn-linkedin{background:#6a0dad;}
+        .btn-voltar{margin-top:18px;background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.06);}
+        footer{position:absolute;bottom:10px;text-shadow:0 0 15px #a020f0;color:#a020f0;z-index:2;
+               font-family:'Orbitron',sans-serif;font-size:1rem;letter-spacing:2px;}
+        @media (max-width:420px){.btn{padding:10px 18px;font-size:14px;}h1{font-size:1.6rem;}}
+    </style>
+</head>
+<body>
+    <canvas id="matrix"></canvas>
+
+    <h1>Entre em Contato</h1>
+    <div class="contact-links">
+        <a href="tel:+5511993757586" class="btn btn-phone">📞 Ligar</a>
+        <a href="mailto:henryluiz474@gmail.com" class="btn btn-email">📧 E-mail</a>
+        <a href="https://instagram.com/henryluiz_171" target="_blank" class="btn btn-instagram">📸 Instagram</a>
+        <a href="https://linkedin.com/in/henryluiz_171" target="_blank" class="btn btn-linkedin">💼 LinkedIn</a>
+        <a href="https://wa.me/5511993757586" target="_blank" class="btn btn-whatsapp">📱 WhatsApp</a>
+        <a href="{{ url_for('index') }}" class="btn btn-voltar">⬅️ Voltar ao Início</a>
+    </div>
+
+    <script>
+        const canvas = document.getElementById("matrix");
+        const ctx = canvas.getContext("2d");
+        const fontSize = 14;
+        let columns = 0;
+        let drops = [];
+
+        function initCanvas(){
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            columns = Math.floor(canvas.width / fontSize);
+            drops = new Array(columns);
+            for(let i=0;i<columns;i++) drops[i] = Math.floor(Math.random()*20);
+        }
+
+        const letters = "01<>/{}[]#@$%&ABCDEFGHIJL3DXL3DXL3DXL3DXL3DXL3DXL3DXL3DXL3DXL3DXL3DXL3DXQRSTUVWXYZ";
+        const lettersArr = letters.split("");
+
+        function draw(){
+            ctx.fillStyle = "rgba(0,0,0,0.05)";
+            ctx.fillRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = "#0F0";
+            ctx.font = fontSize + "px monospace";
+            for(let i=0;i<drops.length;i++){
+                const text = lettersArr[Math.floor(Math.random()*lettersArr.length)];
+                ctx.fillText(text, i*fontSize, drops[i]*fontSize);
+                if((drops[i]*fontSize) > canvas.height && Math.random() > 0.975) drops[i]=0;
+                drops[i]++;
+            }
+        }
+
+        let animInterval = null;
+        function start(){ if(animInterval) clearInterval(animInterval); animInterval = setInterval(draw,35); }
+        initCanvas(); start();
+        window.addEventListener("resize", ()=>{ initCanvas(); start(); });
+    </script>
+
+    <footer>⚡ DESENVOLVIDO POR: L3DX ⚡</footer>
+</body>
+</html>
